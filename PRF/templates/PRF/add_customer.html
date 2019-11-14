@@ -1,0 +1,23 @@
+{% extends 'base.html' %} {% load crispy_forms_tags %} {% block content %}
+<div class="container mt-4">
+  
+  <form method='post'>
+    {% csrf_token %}
+    <p> Please enter the customer detail after they are registered on SAGE.</p>
+    {{ customer_form.customer_name | as_crispy_field }}
+    {{ customer_form.sage_customer_id | as_crispy_field }}
+    <hr class="mt-4"/>
+    <p> Please enter the customer address used for label. You can change or add additional addresses later before submitting your PRF.</p>
+    {{ address_form.address_line_1 | as_crispy_field }}
+    {{ address_form.address_line_2 | as_crispy_field }} 
+    {{ address_form.city | as_crispy_field }}
+    {{ address_form.country | as_crispy_field }}
+    {{ address_form.post_code | as_crispy_field }}
+
+    <button type="submit" class="btn btn-outline-primary">Save</button>
+    <a class="btn-sm btn-outline-secondary ml-2" href="{% url "web:request-form" %}">BACK TO PRF</a>
+  </form>
+
+</div>
+
+{% endblock content %}

@@ -9,8 +9,6 @@ class Address(models.Model):
     city = models.CharField(max_length=200)
     country = models.CharField(max_length=120, default='United Kingdom')
     post_code = models.CharField(max_length=200)
-    address_label = models.BooleanField(
-        default=False, help_text="if ticked, address will be used for label")
 
     def __str__(self):
         return self.city

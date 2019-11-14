@@ -3,15 +3,14 @@
 <html>
 
 <head>
-    <title>Pharmacistcoop</title>
+    <title>LINCO CARE</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="{% static "styles/main.css" %}">
+    <link rel="stylesheet" href="{% static "style/main.css" %}">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700&display=swap" rel="stylesheet">
 </head>
 
@@ -29,12 +28,14 @@
 
                 <ul class="navbar-nav mr-auto">
                     {% if user.is_authenticated %}
-                    
                     <li class="nav-item">
-                        <a class="nav-link" href="/memberships">PIF</a>
+                            <a class="nav-link" href="{% url 'web:request-form' %}">+ New Request</a>
+                        </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/memberships">My PRF</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/memberships">PRF</a>
+                        <a class="nav-link" href="/memberships">PRFs</a>
                     </li>
 
                 </ul>
@@ -47,9 +48,7 @@
                 </ul>
 
                 <ul class="navbar-nav d-flex justify-content-end">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url "user:register" %}">Register</a>
-                    </li>
+
                     <li class="nav-item">
                         <a class="nav-link" href="{% url "user:login" %}">Login</a>
                     </li>

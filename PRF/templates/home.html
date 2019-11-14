@@ -1,11 +1,31 @@
 {% extends 'base.html' %} {% block content %}
 
-<div class="container mt-4">
-  <div class="col-4">
-    <button class="btn btn-outline-primary">Add a new product</button>
-  </div>
-  <div class="col-4"></div>
-  <div class="col-4"></div>
+<div class="container-fluid" style="padding:0;">
+  <header>
+    <div class="header-title-holder">
+      <h3>LINCO CARE</h3>
+      <a href="{% url 'web:request-form' %}"
+        ><button class="btn btn-outline-light mt-2">
+          MAKE A PRODUCT REQUEST
+        </button>
+      </a>
+    </div>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 100 100"
+      preserveAspectRatio="none"
+    >
+      <polygon fill="white" points="0,100 100,0 100,100" />
+    </svg>
+  </header>
+
+  <section class="mt-5">
+    <p class="text-center">
+      This app is designed and developed by
+      <a href="http://lincocare.co.uk">Linco Care Ltd</a>. All rights reserved
+      2019.
+    </p>
+  </section>
 </div>
 
 {% endblock content %}

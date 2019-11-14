@@ -20,7 +20,7 @@ from django.conf.urls import url
 urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^comments/', include('django_comments.urls')),
-    path('', include('web.urls')),
+    path('', include('web.urls', namespace='web')),
     path('user/', include('user.urls', namespace='user')),
 ]
 # if settings.DEBUG:

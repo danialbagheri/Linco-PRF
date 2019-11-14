@@ -48,8 +48,9 @@ INSTALLED_APPS = [
     # django defualt commenting framework
     'django.contrib.sites',
     'django_comments',
+    'crispy_forms',
     # internal apps
-    'pif',
+    # 'pif',
     'customer',
     'web',
 ]
@@ -128,13 +129,14 @@ USE_L10N = True
 
 USE_TZ = True
 
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static_root')
+    os.path.join(BASE_DIR, 'static_source')
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 SITE_ID = 1

@@ -1,0 +1,29 @@
+{% extends "base.html" %} {% load crispy_forms_tags %} {% load static %} 
+{% block content %}
+<div class="login-background">
+  <div class="login-container">
+    <div class="login-box">
+      {% comment %} <img src="{% static "img/Logo.png" %}" class="logo" />
+      {% endcomment %}
+      <h5 class="center">Sign in</h5>
+      <br />
+      <div class="row">
+        <div class="col-12">
+          <form method="post" class="central-login">
+            {% csrf_token %} {{ form | crispy }}
+            <button type="submit" class="btn btn-outline-dark button-center">
+              Login
+            </button>
+          </form>
+        </div>
+      </div>
+      {% if form.errors %}
+      <div class="alert alert-dark" role="alert">
+        Your username and password didn't match. Please try again.
+      </div>
+      {% endif %} <br />
+      {% comment %}<p> Reset your password <a href="{% url "reset_password" %}">here</a>{% endcomment %}
+    </div>
+  </div>
+</div>
+{% endblock content %}

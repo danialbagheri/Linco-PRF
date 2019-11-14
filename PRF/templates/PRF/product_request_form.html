@@ -1,0 +1,30 @@
+{% extends 'base.html' %} {% load crispy_forms_tags %} {% block content %}
+<div class="container mt-4">
+  <p>
+    This form is being requested by
+    <strong>{{ user.firt_name }} {{ user.last_name }}</strong> on
+    <strong>{% now "jS F Y H:i" %}</strong>.
+  </p>
+  <form target="." method='post'>
+    {{ prf.required_date | as_crispy_field }}
+    <div class="form-row">
+        <div class="col-10 col-md-11 col-lg-11">
+            {{ prf.customer_name | as_crispy_field }}
+        </div>
+        <div class="col-2 col-md-1 col-lg-1">
+            <a title="Add a new customer" href="{% url 'web:add-customer' %}" class="btn btn-outline-primary" style="margin-top:2rem;width:100%;font-size:">
+               + 
+            </a>
+        </div>
+    </div>
+    {{ prf.request_type | as_crispy_field }}
+    <p style="font-size:12px;float: right;"> Hold ctrl or cmd key to select multiple</p>
+    {{ prf.special_instructions | as_crispy_field }}
+    {{ prf.expiry_date_format | as_crispy_field }}
+    {{ prf.pallet_type | as_crispy_field }}
+    {{ product_list_form | crispy }}
+    <button type="submit" class="btn btn-outline-primary">SUBMIT</button>
+  </form>
+</div>
+
+{% endblock content %}
