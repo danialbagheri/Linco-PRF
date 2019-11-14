@@ -58,3 +58,4 @@ def add_customer(request):
         'address_form': address_form
     }
     return render(request, "PRF/add_customer.html", args)
+

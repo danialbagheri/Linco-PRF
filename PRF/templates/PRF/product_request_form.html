@@ -5,26 +5,148 @@
     <strong>{{ user.firt_name }} {{ user.last_name }}</strong> on
     <strong>{% now "jS F Y H:i" %}</strong>.
   </p>
-  <form target="." method='post'>
+  <form target="." method="post">
     {{ prf.required_date | as_crispy_field }}
     <div class="form-row">
-        <div class="col-10 col-md-11 col-lg-11">
-            {{ prf.customer_name | as_crispy_field }}
-        </div>
-        <div class="col-2 col-md-1 col-lg-1">
-            <a title="Add a new customer" href="{% url 'web:add-customer' %}" class="btn btn-outline-primary" style="margin-top:2rem;width:100%;font-size:">
-               + 
-            </a>
-        </div>
+      <div class="col-10 col-md-11 col-lg-11">
+        {{ prf.customer_name | as_crispy_field }}
+      </div>
+      <div class="col-2 col-md-1 col-lg-1">
+        <a
+          title="Add a new customer"
+          href="{% url 'web:add-customer' %}"
+          class="btn btn-outline-primary"
+          style="margin-top:2rem;width:100%;"
+        >
+          +
+        </a>
+      </div>
+      <!-- VUE JS CUSTOMER ADDRESS SELECT BOX -->
+      <div id="address">[[ addresses ]]</div>
+      <!-- END OF VUE JS CUSTOMER ADDRESS SELECT BOX -->
     </div>
     {{ prf.request_type | as_crispy_field }}
-    <p style="font-size:12px;float: right;"> Hold ctrl or cmd key to select multiple</p>
+    <p style="font-size:12px;float: right;">
+      Hold ctrl or cmd key to select multiple
+    </p>
+    <br />
+    <!-- VUE JS PRODUCT FORM -->
+    <div id="newProduct">
+      <button
+        type="button"
+        class="btn btn-outline-dark mt-3 mb-3 align-self-end"
+        @click="addNewProductForm"
+      >
+        Add Product
+      </button>
+      <div
+        class="product-form-container mt-2"
+        style="background-color:aquamarine;border-radius:5px;width:100%;padding:15px;"
+        v-for="(product, index) in products"
+      >
+        <span
+          class="float-right"
+          style="cursor:pointer"
+          @click="deleteProductForm(index)"
+          >x</span
+        >
+        <br />
+        <p>[[ index + 1 ]]</p>
+        <div class="form-row">
+          <div class="col-md-3 mb-3">
+            <label for="">Product Code</label>
+            <input
+              v-model="product.product"
+              placeholder="CALC20"
+              class="form-control"
+            />
+          </div>
+          <div class="col-md-3 mb-3">
+            <label for="">Quantity</label>
+            <input v-model="product.quantity" class="form-control" />
+          </div>
+          <div class="col-md-3 mb-3">
+            <label for="">MFG Date</label>
+            <input
+              v-model="product.mfg_date"
+              type="date"
+              class="dateinput form-control"
+            />
+          </div>
+          <div class="col-md-3 mb-3">
+            <label for="">Expiry Date</label>
+            <input
+              v-model="product.expiry_date"
+              type="date"
+              class="dateinput form-control"
+            />
+          </div>
+          <input
+            v-model="product.notes"
+            placeholder="Some notes"
+            class="form-control"
+          />
+        </div>
+      </div>
+    </div>
+    <!-- END OF VUE JS PRODUCT FORM -->
     {{ prf.special_instructions | as_crispy_field }}
     {{ prf.expiry_date_format | as_crispy_field }}
     {{ prf.pallet_type | as_crispy_field }}
-    {{ product_list_form | crispy }}
+
     <button type="submit" class="btn btn-outline-primary">SUBMIT</button>
   </form>
 </div>
 
+<script>
+  var customerId = document.getElementById("id_customer_name");
+
+  customerId.addEventListener("click", function(customerId) {
+    new Vue({
+      delimiters: ["[[", "]]"],
+      el: "#address",
+      data: {
+        addresses: [{}]
+      },
+      mounted() {
+        var customerId = document.getElementById("id_customer_name").value;
+        fetch("/addresses/" + customerId)
+          .then(response => response.json())
+          .then(data => {
+            this.data;
+          });
+      }
+    });
+  });
+
+  var app = new Vue({
+    delimiters: ["[[", "]]"],
+    el: "#newProduct",
+    data: {
+      products: [
+        {
+          product: "",
+          quantity: "",
+          mfg_date: "",
+          expiry_date: "",
+          notes: ""
+        }
+      ]
+    },
+    methods: {
+      addNewProductForm() {
+        this.products.push({
+          product: "",
+          quantity: "",
+          mfg_date: "",
+          expiry_date: "",
+          notes: ""
+        });
+      },
+      deleteProductForm(index) {
+        this.products.splice(index, 1);
+      }
+    }
+  });
+</script>
 {% endblock content %}

@@ -47,7 +47,7 @@ class AddressForm(ModelForm):
 class ProductRequestForm(ModelForm):
     required_date = forms.DateField(required=True, initial=datetime.date.today,widget=forms.DateInput(attrs={
                                      'type': 'date',
-                                     'class': 'mr-2 ml-2'
+                                     'class': ''
                                  }))
     class Meta:
         model = ProductionJob
@@ -67,11 +67,11 @@ class ProductionListForm(ModelForm):
     quantity = forms.IntegerField(required=True)
     mfg_date = forms.DateField(required=True, initial=datetime.date.today,widget=forms.DateInput(attrs={
         'type': 'date',
-        'class': 'mr-2 ml-2'
+        'class': ''
     }))
     expiry_date = forms.DateField(required=True, initial=datetime.date.today,widget=forms.DateInput(attrs={
                                      'type': 'date',
-                                     'class': 'mr-2 ml-2'
+                                     'class': ''
                                  }))
     notes = forms.CharField(
         widget=forms.TextInput(
