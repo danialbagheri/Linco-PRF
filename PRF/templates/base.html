@@ -3,7 +3,7 @@
 <html>
 
 <head>
-    <title>LINCO CARE</title>
+    <title>PRF - LINCO CARE</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
     <meta charset="UTF-8">
@@ -33,10 +33,10 @@
                             <a class="nav-link" href="{% url 'web:request-form' %}">+ New Request</a>
                         </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/memberships">My PRF</a>
+                        <a class="nav-link" href="{% url 'web:user-jobs' %}">MY REQUESTS</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/memberships">PRFs</a>
+                        <a class="nav-link" href="{% url 'web:all-jobs' %}">JOBS</a>
                     </li>
 
                 </ul>

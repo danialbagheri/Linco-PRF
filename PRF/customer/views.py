@@ -15,6 +15,7 @@ def all_customer_addresses(request, id):
         list_of_Addresses = []
         for addresses in customer_addresses:
             address = {
+                "id": addresses.pk,
                 "address_line_1": addresses.address_line_1,
                 "address_line_2": addresses.address_line_2,
                 "city": addresses.city,

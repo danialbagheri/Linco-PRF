@@ -2,10 +2,12 @@
 <div class="container mt-4">
   <p>
     This form is being requested by
-    <strong>{{ user.firt_name }} {{ user.last_name }}</strong> on
+    <strong>{{ user.first_name }} {{ user.last_name }}</strong> on
     <strong>{% now "jS F Y H:i" %}</strong>.
   </p>
-  <form target="." method="post">
+  <form target="." method="post" class="mb-4">
+    {% csrf_token %}
+    <!-- Django form -->
     {{ prf.required_date | as_crispy_field }}
     <div class="form-row">
       <div class="col-10 col-md-11 col-lg-11">
@@ -22,7 +24,34 @@
         </a>
       </div>
       <!-- VUE JS CUSTOMER ADDRESS SELECT BOX -->
-      <div id="address">[[ addresses ]]</div>
+      <div id="address">
+        <button
+          type="button"
+          v-on:click="fetchAddress"
+          class="btn btn-outline-dark btn-sm"
+        >
+          Show Address(es)
+        </button>
+        <input type="hidden" name="customer_address_id" id="addressId" value="" />
+        <div class="row" style="padding: 15px;">
+          <div
+            v-for="(address, index) in addresses"
+            class="address_container mt-3"
+            :class="{'add-selected': index == activeIndex}"
+            v-on:click="selectAddress(address.id, index)"
+          >
+            <p class="">
+              [[ address.address_line_1 ]]<br />
+              [[ address.address_line_2 ]]<br />
+              [[ address.city ]]<br />
+              [[ address.country ]]<br />
+              [[ address.post_code ]]<br />
+            </p>
+          </div>
+        </div>
+      </div>
+      <br />
+      {{ prf.address_label | as_crispy_field }}
       <!-- END OF VUE JS CUSTOMER ADDRESS SELECT BOX -->
     </div>
     {{ prf.request_type | as_crispy_field }}
@@ -58,16 +87,19 @@
             <input
               v-model="product.product"
               placeholder="CALC20"
+              name="product"
               class="form-control"
             />
           </div>
           <div class="col-md-3 mb-3">
             <label for="">Quantity</label>
-            <input v-model="product.quantity" class="form-control" />
+            <input v-model="product.quantity" name="quantity"
+            class="form-control" />
           </div>
           <div class="col-md-3 mb-3">
             <label for="">MFG Date</label>
             <input
+              name="mfg_date"
               v-model="product.mfg_date"
               type="date"
               class="dateinput form-control"
@@ -76,12 +108,14 @@
           <div class="col-md-3 mb-3">
             <label for="">Expiry Date</label>
             <input
+              name="expiry_date"
               v-model="product.expiry_date"
               type="date"
               class="dateinput form-control"
             />
           </div>
           <input
+            name="notes"
             v-model="product.notes"
             placeholder="Some notes"
             class="form-control"
@@ -91,32 +125,51 @@
     </div>
     <!-- END OF VUE JS PRODUCT FORM -->
     {{ prf.special_instructions | as_crispy_field }}
-    {{ prf.expiry_date_format | as_crispy_field }}
+  
+    <!-- django form -->
     {{ prf.pallet_type | as_crispy_field }}
+    <div>
 
-    <button type="submit" class="btn btn-outline-primary">SUBMIT</button>
+      <button type="button" class="btn btn-outline-secondary" disabled>SAVE FOR LATER</button>
+      <button type="submit" class="btn btn-outline-primary">SUBMIT</button>
+      
+    </div>
   </form>
+  <span class="mt-4 "></span>
+  <br />
 </div>
 
 <script>
   var customerId = document.getElementById("id_customer_name");
 
-  customerId.addEventListener("click", function(customerId) {
-    new Vue({
-      delimiters: ["[[", "]]"],
-      el: "#address",
-      data: {
-        addresses: [{}]
-      },
-      mounted() {
+
+  new Vue({
+    delimiters: ["[[", "]]"],
+    el: "#address",
+    data: {
+      addresses: [],
+      activeIndex: null
+    },
+    methods: {
+      fetchAddress: function() {
         var customerId = document.getElementById("id_customer_name").value;
-        fetch("/addresses/" + customerId)
+        var url = `/customer/address/${customerId}/`;
+        fetch(url)
           .then(response => response.json())
           .then(data => {
-            this.data;
+            this.addresses = data.customer_addresses;
           });
+      },
+      selectAddress(id, index){
+        var addressId = document.getElementById("addressId")
+        var addContainer = document.querySelectorAll('.address_container')
+        //var selectedAddress = document.getElementById(`address${id}`)
+        console.log(id)
+        addressId.value = id
+        //selectedAddress.classList.add("add-selected")
+        this.activeIndex = index
       }
-    });
+    }
   });
 
   var app = new Vue({

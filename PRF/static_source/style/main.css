@@ -22,22 +22,36 @@ svg {
   /* set height to pixels if you want angle to change with screen width */
 }
 .header-title-holder {
-  padding-top: 240px;
+  padding-top: 100px;
   text-align: center;
+}
+.header-title-holder > img {
+  width: 100px;
+  padding: 15px;
 }
 .header-title-holder > h3 {
   color: #fff;
 }
-
+.text-centre{
+  text-align: center !important;
+}
 /* messages css */
 
-.messages.success {
+.messages > ul , ul.messages {
+  padding: 0 !important;
+  margin-bottom: 0;
+}
+
+.success {
+  padding: 5px;
   background-color: green;
 }
-.messages.info {
+.info {
+  padding: 5px;
   background-color: blue;
 }
-.messages.error {
+.error {
+  padding: 5px;
   background-color: red;
 }
 
@@ -46,10 +60,7 @@ svg {
   height: 100vh;
   width: 100%;
   background: rgb(247, 174, 124);
-  background: linear-gradient(
-    135deg,
-    #213781, #5999c6
-  );
+  background: linear-gradient(135deg, #213781, #5999c6);
 }
 
 .login-container {
@@ -79,4 +90,17 @@ svg {
 
 .no-radius {
   border-radius: 0 !important;
+}
+
+.address_container {
+  border: 1px solid #5999c6;
+  border-radius: 5px;
+  padding: 10px;
+  margin-right: 5px;
+
+  cursor: pointer;
+}
+
+.add-selected{
+  border: 2px solid #213781;
 }

@@ -71,7 +71,7 @@ class ProductionJob(models.Model):
         ('Heat Treated', 'Heat Treated'),
         ('Other', 'Other'),
     )
-    prf_number = models.IntegerField()
+    prf_number = models.IntegerField(null=True, unique=True)
     customer_name = models.ForeignKey(
         Customer, on_delete=models.SET_NULL, blank=True, null=True)
     date_issued = models.DateField(auto_now_add=True)

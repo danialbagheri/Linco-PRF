@@ -22,7 +22,7 @@ urlpatterns = [
     url(r'^comments/', include('django_comments.urls')),
     path('', include('web.urls', namespace='web')),
     path('user/', include('user.urls', namespace='user')),
-    path('customer', include('customer.urls', namespace='customer'))
+    path('customer/', include('customer.urls', namespace='customer'))
 ]
 # if settings.DEBUG:
 #     urlpatterns += static(settings.STATIC_URL,

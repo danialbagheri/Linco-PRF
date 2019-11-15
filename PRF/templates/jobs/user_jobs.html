@@ -1,0 +1,77 @@
+{% extends "base.html" %} 
+<!-- Content goes here -->
+{% block content %}
+{{ production_jobs }}
+<span class="table-responsive text-nowrap ">
+        <table class="table table-hover table w-auto ">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">PRF Number</th>
+              <th scope="col">Customer Name</th>
+              <th scope="col">Requested By</th>
+              <th scope="col">Request Type</th>
+              <th scope="col">Required Date</th>
+              <th scope="col">Completion Date</th>
+              <th scope="col">Pallet Type</th>
+              <th scope="col">Expiry Date Format</th>
+              <th scope="col">Status</th>
+              <th scope="col">Special instructions</th>
+
+            </tr>
+          </thead>
+          <tbody>
+            {% for job in jobs %}
+            <tr>
+              <th scope="row">{{ job.pk }}</th>
+              <td><a href="">{{ job.prf_number }}</a></td>
+              <td>{{ job.customer_name }}</td>
+              <td>{{ job.requested_by.first_name }} {{ job.requested_by.last_name }}</td>
+              <td>
+              {% for type in job.request_type.all %}
+              <span class="btn-sm btn btn-success">{{ type }}</span>
+              {% endfor %}
+                </td>
+                <td>{{ job.required_date }}</td>
+                <td></td>
+                <td>{{ job.pallet_type }}</td>
+                <td>{{ job.expiry_date_format }}</td>
+                <td>{{ job.status }}</td>
+                <td>{{ job.special_instructions }}</td>
+            </tr>
+    
+            {% endfor %}
+          </tbody>
+        </table>
+    
+        <nav class="Page navigation example">
+          <ul class="pagination pg-blue">
+            {% if jobs.has_previous %}
+            <li class="page-item">
+              <a href="?page=1" class="page-link">&laquo; First</a>
+            </li>
+            <li class="page-item">
+              <a href="?page={{ members.previous_page_number }}" class="page-link"
+                >Previous</a
+              >
+            </li>
+            {% endif %} 
+            {% if jobs.has_next %}
+            <li class="page-item">
+              <a href="?page={{ members.next_page_number }}" class="page-link"
+                >Next</a
+              >
+            </li>
+            <li class="page-item">
+              <a href="?page={{ members.paginator.num_pages }}" class="page-link"
+                >Last &raquo;</a
+              >
+            </li>
+            {% endif %}
+          </ul>
+          <span class="current">
+            Page {{ jobs.number }} of {{ jobs.paginator.num_pages }}.
+          </span>
+        </nav>
+      </span>
+{% endblock content %}

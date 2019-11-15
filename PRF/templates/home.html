@@ -1,14 +1,17 @@
 {% extends 'base.html' %} {% block content %}
+{% load staticfiles %}
 
 <div class="container-fluid" style="padding:0;">
   <header>
     <div class="header-title-holder">
+      <img src="{% static "images/linco-logo.png" %}" />
       <h3>LINCO CARE</h3>
       <a href="{% url 'web:request-form' %}"
         ><button class="btn btn-outline-light mt-2">
           MAKE A PRODUCT REQUEST
         </button>
       </a>
+      
     </div>
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -18,6 +21,31 @@
       <polygon fill="white" points="0,100 100,0 100,100" />
     </svg>
   </header>
+  <div class="container mt-6">
+    <div class="row mt-5">
+      <div class="col-4 text-centre ">
+          <i class="material-icons" style="font-size: 39px;">
+              description
+              </i>
+          <p class="text-centre mt-2">TOTAL JOBS</p>
+          <p class="text-centre"><strong>{{ number_of_jobs }}</strong></p>
+      </div>
+      <div class="col-4 text-centre ">
+          <i class="material-icons" style="font-size: 39px;">
+              pageview
+              </i>
+          <p class="text-centre mt-2">UNDER REVIEW</p>
+          <p class="text-centre"><strong></strong></p>
+      </div>
+      <div class="col-4 text-centre ">
+          <i class="material-icons" style="font-size: 39px;">
+              verified_user
+              </i>
+          <p class="text-centre mt-2">COMPLETED JOBS</p>
+          <p class="text-centre"><strong></strong></p>
+      </div>
+    </div>
+  </div>
 
   <section class="mt-5">
     <p class="text-center">
