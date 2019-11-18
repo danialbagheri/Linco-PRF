@@ -2,4 +2,7 @@ from django.apps import AppConfig
 
 
 class WebConfig(AppConfig):
-    name = 'PRF'
+    name = 'web'
+    def ready(self):
+        # everytime server restarts
+        from .signals import audit_log

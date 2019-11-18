@@ -25,7 +25,7 @@
             {% for job in jobs %}
             <tr>
               <th scope="row">{{ job.pk }}</th>
-              <td><a href="">{{ job.prf_number }}</a></td>
+              <td><a href="{% url 'web:single-job' job.pk %}">{{ job.prf_number }}</a></td>
               <td>{{ job.customer_name }}</td>
               <td>{{ job.requested_by.first_name }} {{ job.requested_by.last_name }}</td>
               <td>

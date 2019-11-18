@@ -1,0 +1,27 @@
+{% extends "base.html" %} 
+<!-- Content goes here -->
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-9">
+            <p><strong>PRF NUMBER: </strong>{{ job.prf_number }} 
+                <strong>Requested type:</strong>
+                {% for types in job.request_type.all %}
+                <span class="badge badge-secondary">{{ types }}</span></p>
+                {% endfor %}
+            <p><strong>Requested by:</strong> {{ job.requested_by }}</p>
+            <p><strong>Requested date:</strong> {{ job.requested_date }}</p>
+            <p><strong>Required by:</strong><span class="text-primary"> {{ job.required_by }}</span></p>
+            <p></p>
+        </div>
+        <div class="col-3 bg-light">
+            {% for log in logs %}
+                <p style="font-size:14px"><strong>{{ log.table_row}}</strong> is changed on {{ log.timestamp }} by {{ log.user_id }}.</p>
+                <hr />
+            {% endfor %}
+            
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

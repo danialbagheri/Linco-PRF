@@ -65,11 +65,11 @@ class CustomerForm(ModelForm):
 class ProductionListForm(ModelForm):
     product = forms.CharField( max_length=200, required=True)
     quantity = forms.IntegerField(required=True)
-    mfg_date = forms.DateField(required=True, initial=datetime.date.today,widget=forms.DateInput(attrs={
+    mfg_date = forms.DateField(required=False, initial=datetime.date.today,widget=forms.DateInput(attrs={
         'type': 'date',
         'class': ''
     }))
-    expiry_date = forms.DateField(required=True, initial=datetime.date.today,widget=forms.DateInput(attrs={
+    expiry_date = forms.DateField(required=False, initial=datetime.date.today,widget=forms.DateInput(attrs={
                                      'type': 'date',
                                      'class': ''
                                  }))
