@@ -18,9 +18,12 @@
 <body>
     {% include 'messages.html' %}
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #213781;background-image: linear-gradient(135deg, #213781, #5999c6)">
         <div class="container">
-            <a class="navbar-brand main-logo" href="/">LINCO CARE</a>
+            <a class="navbar-brand main-logo" href="/">
+                <img src="{% static "images/linco-logo.png" %}" style="height:40px;margin-right:10px;" />
+                LINCO CARE
+            </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>

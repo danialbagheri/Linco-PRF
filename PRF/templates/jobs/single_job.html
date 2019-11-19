@@ -7,8 +7,15 @@
 {% block content %}
 <div class="container mt-4">
     <div class="row">
-        <div class="col-8">
-            <h5 class="bg-warning text-light p-3 rounded">{{ job.status }}</h5>
+        <div class="col-md-8 col-12">
+            <div class="bg-warning text-light p-3 rounded" id="status">
+                <button class="btn btn-sm float-right text-white" v-on:click="editStatus()">Edit</button>
+                <select v-if="EditStatusForm" class="form-control" style="width:300px;">       
+                        <option value="{{ job.status }}">{{ job.status }}</option>
+                        <option value="REVIEW">{{ Review }}</option>
+                </select>
+                <h5 v-else="EditStatusForm">{{ job.status }}</h5>
+            </div>
             <div class="p-2">
                 <p><strong>PRF NUMBER: </strong>{{ job.prf_number }} 
                     <strong>Requested type:</strong>
@@ -63,8 +70,9 @@
                         {% for comment in comment_list %}
                         <div class="bg-secondary rounded p-2 m-2">
                             <p class="text-white"><strong>{{ comment.user.first_name }} {{ comment.user.last_name }}:</strong>
-                            {{ comment.comment }} <span class="float-right text-white">  {{ comment.submit_date }}</span></p>
+                            {{ comment.comment }} </p>
                         </div>
+                        <p class="text-right text-muted" style="font-size: 12px;;">  {{ comment.submit_date }}</p>
                         {% endfor %}
                         {% get_comment_form for job as form %}
                     </div>
@@ -77,15 +85,24 @@
                             {{ form.timestamp }}
                             {{ form.security_hash }}
                             <input type="hidden" name="honeypot" value="" id="id_honeypot" />
-                            <input type="hidden" name="next" value="" />
+                            <input type="hidden" name="next" value="{{ request.get_full_path }}" />
                             <input class="btn btn-outline-primary" type="submit" value="Add comment" id="id_submit" />
                         </form>
                     </div>
 
         </div>
-        <div class="col-4">
-            <h6 class="p-2"><strong>Expected Completion Date:</strong> {{ job.expected_completion_date }}</h6>
-            <h5 class="p-2"><strong>Completion Date:</strong> {{ job.completion_date }}</h5>
+        <div class="col-md-4 col-12">
+            <div id="completion" class="p-2">
+                <h6 ><strong>Expected Completion Date:</strong>{{ job.expected_completion_date | date:"Y-m-d" }}</h6>
+                <h5 ><strong>Completion Date:</strong> {{ job.completion_date }}</h5>
+                <div v-if="editCompletionDateForm">
+                    <label>Expected Completion Date</label>
+                    <input class="form-control dateinput" type="date" value="{{ job.expected_completion_date | date:'Y-m-d' }}" v-model="expectedCompletion" />
+                </div>
+                <div class="text-right">
+                    <button class="btn btn-sm" v-on:click="editCompletionDate()">Edit</button>
+                </div>
+            </div>
             <div class="bg-light p-3 rounded">
                 <h4 class="mt-2">LOGS</h4>
                 <hr />
@@ -105,4 +122,40 @@
     </div>
 </div>
 
+
+<!--  JS codes -->
+<script>
+    var completion = new Vue({
+        delimiters: ["[[", "]]"],
+        el: "#completion",
+        data: {
+            expectedCompletion: null,
+          editCompletionDateForm: false,
+        },
+        methods: {
+            editCompletionDate: function() {
+                console.log(this.editCompletionDateForm)
+                this.editCompletionDateForm = !this.editCompletionDateForm;
+          }
+        }
+      });
+    var status = new Vue({
+    delimiters: ["[[", "]]"],
+    el: "#status",
+    data: {
+        EditStatusForm: false,
+        options:[
+            "-",
+            "Pending",
+            "Being Reviewed",
+        ]
+    },
+    methods: {
+        editStatus: function() {
+            console.log(this.EditStatusForm)
+            this.EditStatusForm = !this.EditStatusForm;
+        }
+    }
+    });
+</script>
 {% endblock content %}
