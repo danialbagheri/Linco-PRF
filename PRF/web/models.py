@@ -147,7 +147,7 @@ class ProductionJob(ModelDiffMixin):
     date_issued = models.DateField(auto_now_add=True)
     required_date = models.DateField(auto_now_add=False)
     expected_completion_date = models.DateField(
-        auto_now_add=True, blank=True, null=True)
+        auto_now_add=False, blank=True, null=True)
     completion_date = models.DateField(auto_now_add=False, blank=True, null=True)
     production_list = models.ManyToManyField(
         ProductionList, blank=True)

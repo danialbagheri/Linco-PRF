@@ -4,7 +4,9 @@ from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 from .forms import ProductRequestForm, CustomerForm, AddressForm, ProductionListForm
 from django.http import HttpResponseRedirect
+from django.contrib.auth.models import User
 from .models import ProductionJob, ProductionList, ModelChangeLogsModel
+from customer.models import Address
 def staff_required(login_url=None):
     return user_passes_test(lambda u: u.is_staff, login_url=login_url)
 
@@ -136,9 +138,13 @@ def user_jobs(request):
 def single_job(request, job_id):
     production_job =ProductionJob.objects.get(id=job_id)
     logs = ModelChangeLogsModel.objects.filter(table_name="ProductionJob", table_id=production_job.pk)
+    users = User.objects.all()
+    addresses = Address.objects.all()
     args = {
         "job": production_job,
-        "logs": logs
+        "logs": logs,
+        "users": users,
+        "addresses": addresses
     } 
     return render(request, "jobs/single_job.html", args)
 

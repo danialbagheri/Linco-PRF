@@ -52,7 +52,7 @@ class ProductRequestForm(ModelForm):
     class Meta:
         model = ProductionJob
         fields = {'customer_name', 'request_type', 'required_date',
-                  'special_instructions','pallet_type','address_label'}
+                  'special_instructions','pallet_type','address_label', 'shrink_wrap'}
 
 
 class CustomerForm(ModelForm):

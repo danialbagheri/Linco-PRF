@@ -1,25 +1,106 @@
-{% extends "base.html" %} 
+{% extends "base.html" %}
+ <!--Loading crispy forms  -->
+ {% load crispy_forms_tags %}
+<!-- Loading comments -->
+{% load comments %}
 <!-- Content goes here -->
 {% block content %}
 <div class="container mt-4">
     <div class="row">
-        <div class="col-9">
-            <p><strong>PRF NUMBER: </strong>{{ job.prf_number }} 
-                <strong>Requested type:</strong>
-                {% for types in job.request_type.all %}
-                <span class="badge badge-secondary">{{ types }}</span></p>
-                {% endfor %}
-            <p><strong>Requested by:</strong> {{ job.requested_by }}</p>
-            <p><strong>Requested date:</strong> {{ job.requested_date }}</p>
-            <p><strong>Required by:</strong><span class="text-primary"> {{ job.required_by }}</span></p>
-            <p></p>
-        </div>
-        <div class="col-3 bg-light">
-            {% for log in logs %}
-                <p style="font-size:14px"><strong>{{ log.table_row}}</strong> is changed on {{ log.timestamp }} by {{ log.user_id }}.</p>
+        <div class="col-8">
+            <h5 class="bg-warning text-light p-3 rounded">{{ job.status }}</h5>
+            <div class="p-2">
+                <p><strong>PRF NUMBER: </strong>{{ job.prf_number }} 
+                    <strong>Requested type:</strong>
+                    {% for types in job.request_type.all %}
+                    <span class="badge badge-secondary">{{ types }}</span></p>
+                    {% endfor %}
+                <p><strong>Requested by:</strong> {{ job.requested_by }}</p>
+                <p><strong>Requested date:</strong> {{ job.requested_date }}</p>
+                <p><strong>Required date:</strong><span class="text-primary"> {{ job.required_date }}</span></p>
+                <p><strong>Pallet Type:</strong> {{ job.pallet_type }}</p>
+                <p><strong>Shrink Wrap:</strong> {{ job.shrink_wrap }}</p>
                 <hr />
-            {% endfor %}
+                <p><strong>Special Instructions:</strong> {{ job.special_instructions }}</p>
+            </div>
+            <h5 class="bg-light p-2 rounded">Customer information</h5>
+            <div class="p-2">
+                <p>{% if job.address_label == False %}
+                    Address label is not required.
+                    {% else %}
+                    Please include the address label.
+                    {% endif %}</p>
+                <p><strong>Name:</strong> {{ job.customer_name }}</p>
+                <p><strong>Sage ID:</strong> {{ job.customer_name.sage_customer_id }}</p>
+                <p><strong>Address:</strong></p>
+                {% for address in addresses %}
+
+                    {% if address.id == job.customer_address_id|add:"0" %}
+                    <p>{{ address.address_line_1}}<br />
+                    {{ address.address_line_2 }}<br />
+                    {{ address.city }}<br />
+                    {{ address.country }}<br />
+                    {{ address.post_code }}<br /></p>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <h5 class="bg-light p-2 rounded">Requested Items</h5>
             
+                {% for product in job.production_list.all %}
+                <div class="row p-2">
+                    <div class="col-3"><p><strong>Product Code:</strong> {{  product.product }}</p></div>
+                    <div class="col-3"><p><strong>Quantity:</strong> {{  product.quantity }}</p></div>
+                    <div class="col-3"><p><strong>MFG Date:</strong> {{  product.mfg_date }}</p></div>
+                    <div class="col-3"><p><strong>Expiry Date:</strong> {{  product.expiry_date }}</p></div>
+                    <div class="col-12">{{  product.note }}</div>
+                    <div class="col-12"><hr /></div>
+                </div>
+                {% endfor %} 
+            
+                <div class="p-2 col-12">
+                        <h5 class="bg-light p-2 rounded">Comments</h5>
+                        {% get_comment_list for job as comment_list %}
+                        {% for comment in comment_list %}
+                        <div class="bg-secondary rounded p-2 m-2">
+                            <p class="text-white"><strong>{{ comment.user.first_name }} {{ comment.user.last_name }}:</strong>
+                            {{ comment.comment }} <span class="float-right text-white">  {{ comment.submit_date }}</span></p>
+                        </div>
+                        {% endfor %}
+                        {% get_comment_form for job as form %}
+                    </div>
+                    <div class="p-2 col-12">
+                        <form action="{% comment_form_target %}" method="POST">
+                            {% csrf_token %}
+                            {{ form.comment | as_crispy_field }}
+                            {{ form.content_type }}
+                            {{ form.object_pk }}
+                            {{ form.timestamp }}
+                            {{ form.security_hash }}
+                            <input type="hidden" name="honeypot" value="" id="id_honeypot" />
+                            <input type="hidden" name="next" value="" />
+                            <input class="btn btn-outline-primary" type="submit" value="Add comment" id="id_submit" />
+                        </form>
+                    </div>
+
+        </div>
+        <div class="col-4">
+            <h6 class="p-2"><strong>Expected Completion Date:</strong> {{ job.expected_completion_date }}</h6>
+            <h5 class="p-2"><strong>Completion Date:</strong> {{ job.completion_date }}</h5>
+            <div class="bg-light p-3 rounded">
+                <h4 class="mt-2">LOGS</h4>
+                <hr />
+                {% for log in logs %}
+                    <p title="{{ log.data}}" style="font-size:14px;cursor:pointer;"><strong>{{ log.table_row }}</strong> is changed on {{ log.timestamp }}.
+                    {% for user in users %} 
+                        {% if user.id == log.user_id %}
+                            by <strong>{{ user.first_name }} {{ user.last_name }}</strong>.</p>
+                        {% endif %}
+                    {% endfor %}
+                    <hr />
+                {% endfor %}
+            </div>
+        
+
         </div>
     </div>
 </div>

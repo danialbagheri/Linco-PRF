@@ -128,6 +128,7 @@
   
     <!-- django form -->
     {{ prf.pallet_type | as_crispy_field }}
+    {{ prf.shrink_wrap | as_crispy_field }}
     <div>
 
       <button type="button" class="btn btn-outline-secondary" disabled>SAVE FOR LATER</button>
@@ -148,7 +149,8 @@
     el: "#address",
     data: {
       addresses: [],
-      activeIndex: null
+      activeIndex: null,
+      newAddressForm: false,
     },
     methods: {
       fetchAddress: function() {
@@ -158,13 +160,15 @@
           .then(response => response.json())
           .then(data => {
             this.addresses = data.customer_addresses;
+            if (data.customer_addresses.length >= 1){
+              this.newAddressForm = true
+            }
           });
       },
       selectAddress(id, index){
         var addressId = document.getElementById("addressId")
         var addContainer = document.querySelectorAll('.address_container')
         //var selectedAddress = document.getElementById(`address${id}`)
-        console.log(id)
         addressId.value = id
         //selectedAddress.classList.add("add-selected")
         this.activeIndex = index
