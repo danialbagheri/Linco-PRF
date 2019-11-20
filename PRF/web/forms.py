@@ -9,6 +9,7 @@ from .models import (RequestType,
 from customer.models import Address, Customer
 from customer.countries import *
 from crispy_forms.helper import FormHelper
+from web.models import RequestType, SHRINK_WRAP, PALLET_TYPE
 # SOME CUSTOM VALIDATORS
 
 
@@ -45,21 +46,37 @@ class AddressForm(ModelForm):
 
 
 class ProductRequestForm(ModelForm):
-    required_date = forms.DateField(required=True, initial=datetime.date.today,widget=forms.DateInput(attrs={
+    required_date = forms.DateField(label="Required Date",required=True, initial=datetime.date.today,widget=forms.DateInput(attrs={
                                      'type': 'date',
                                      'class': ''
                                  }))
+    request_type = forms.ModelMultipleChoiceField(widget = forms.CheckboxSelectMultiple(attrs={
+                                     'class': 'form-check form-check-inline request-type'
+                                 }),queryset=RequestType.objects.all())
+    customer_address_id = forms.CharField(max_length=10, required=True)
+    shrink_wrap = forms.ChoiceField(label="Shrink Wrap",choices=SHRINK_WRAP, required=True)
+    pallet_type = forms.ChoiceField(label="Pallet Type",choices=PALLET_TYPE, required=True)
     class Meta:
         model = ProductionJob
-        fields = {'customer_name', 'request_type', 'required_date',
-                  'special_instructions','pallet_type','address_label', 'shrink_wrap'}
+        fields = ('customer_name', 'request_type', 'required_date','prf_number','requested_by',
+                  'special_instructions','pallet_type','address_label', 'shrink_wrap','customer_address_id')
+        labels = {
+            'customer_name': 'Customer Name',
+            'address_label': 'Do you need an address label?',
+        }
 
 
 class CustomerForm(ModelForm):
-
+    country = forms.ChoiceField(choices=COUNTRIES, initial='GB')
+    # customer_name = forms.ModelMultipleChoiceField(label='Customer Name',queryset=Customer.objects.all())
     class Meta:
         model = Customer
-        fields = ('customer_name','sage_customer_id')
+        fields = ('customer_name','sage_customer_id',
+        'country')
+        labels = {
+            'customer_name': 'Customer Name',
+            'sage_customer_id': 'Sage Customer ID',
+        }
 
 
 class ProductionListForm(ModelForm):

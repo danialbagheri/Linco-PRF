@@ -2,7 +2,29 @@ from django.db import models
 from django.contrib.auth.models import User
 from customer.models import Customer
 from django.forms.models import model_to_dict
+from datetime import timedelta, date, datetime, timezone
 
+SHRINK_WRAP = (
+    ('Standard Clear', 'Standard Clear'),
+    ('Black', 'Black'),
+    ('Security Tape', 'Security Tape'),
+)
+STATUS = (
+    ('Pending', 'Pending'),
+    ('Open', 'Open'),
+    ('Reviewing', 'Reviewing'),
+    ('On-Hold', 'On-Hold'),
+    ('Awaiting Information', 'Awaiting Information'),
+    ('In progress', 'In progress'),
+    ('Complete', 'Complete'),
+)
+PALLET_TYPE = (
+    ('Standard', 'Standard'),
+    ('Europe ', 'Europe'),
+    ('Chap', 'Chap'),
+    ('Heat Treated', 'Heat Treated'),
+    ('Other', 'Other'),
+)
 
 class ModelDiffMixin(models.Model):
     """
@@ -113,28 +135,8 @@ class ProductionList(ModelDiffMixin):
         return self.product
 
 
+
 class ProductionJob(ModelDiffMixin):
-    SHRINK_WRAP = (
-        ('Standard Clear', 'Standard Clear'),
-        ('Black', 'Black'),
-        ('Security Tape', 'Security Tape'),
-    )
-    STATUS = (
-        ('Pending', 'Pending'),
-        ('Open', 'Open'),
-        ('Reviewing', 'Reviewing'),
-        ('On-Hold', 'On-Hold'),
-        ('Awaiting Information', 'Awaiting Information'),
-        ('In progress', 'In progress'),
-        ('Complete', 'Complete'),
-    )
-    PALLET_TYPE = (
-        ('Standard', 'Standard'),
-        ('Europe ', 'Europe'),
-        ('Chap', 'Chap'),
-        ('Heat Treated', 'Heat Treated'),
-        ('Other', 'Other'),
-    )
     prf_number = models.IntegerField(null=True, unique=True)
     customer_name = models.ForeignKey(
         Customer, on_delete=models.SET_NULL, blank=True, null=True)
@@ -162,5 +164,36 @@ class ProductionJob(ModelDiffMixin):
         max_length=30, choices=STATUS, blank=True, null=True)
     address_label = models.BooleanField(default=False)
 
+
+    @property
+    def is_past_due(self):
+        from_date = self.requested_date
+        number_of_days = 3
+        today = datetime.now(timezone.utc)
+        to_date = from_date
+        while number_of_days:
+            to_date += timedelta(1)
+            if to_date.weekday() < 5: # i.e. is not saturday or sunday
+                number_of_days -= 1      
+        if to_date < today and self.status == 'Pending':
+            return True
+        else:
+            return False
+
+    @property
+    def is_late(self):
+        from_date = self.requested_date
+        number_of_days = 2
+        today = datetime.now(timezone.utc)
+        to_date = from_date
+        while number_of_days:
+            to_date += timedelta(1)
+            if to_date.weekday() < 5: # i.e. is not saturday or sunday
+                number_of_days -= 1      
+        if to_date < today and self.status == 'Pending':
+            return True
+        else:
+            return False
+    
     def __str__(self):
         return str(self.prf_number)

@@ -5,6 +5,7 @@
     {% csrf_token %}
     <p> Please enter the customer detail after they are registered on SAGE.</p>
     {{ customer_form.customer_name | as_crispy_field }}
+    {{ customer_form.country | as_crispy_field }}
     {{ customer_form.sage_customer_id | as_crispy_field }}
     <hr class="mt-4"/>
     <p> Please enter the customer address used for label. You can change or add additional addresses later before submitting your PRF.</p>

@@ -104,3 +104,17 @@ svg {
 .add-selected{
   border: 2px solid #213781;
 }
+.request-type{
+  list-style-type:none;
+}
+.request-type > li {
+  list-style-type: none;
+  padding-right: 15px;
+}
+.request-type .form-check-inline{
+  margin-right: 1px !important;
+}
+
+.click-row{
+  cursor: pointer;
+}

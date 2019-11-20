@@ -1,15 +1,18 @@
 {% extends "base.html" %} 
 <!-- Content goes here -->
 {% block content %}
-{{ production_jobs }}
+<!-- load custom tags -->
+{% load business_days %}
+
 <span class="table-responsive text-nowrap ">
         <table class="table table-hover table w-auto ">
           <thead class="thead-dark">
             <tr>
               <th scope="col">#</th>
               <th scope="col">PRF Number</th>
-              <th scope="col">Customer Name</th>
+              <th scope="col">Requested Date</th>
               <th scope="col">Requested By</th>
+              <th scope="col">Customer Name</th>
               <th scope="col">Request Type</th>
               <th scope="col">Required Date</th>
               <th scope="col">Pallet Type</th>
@@ -23,11 +26,21 @@
           </thead>
           <tbody>
             {% for job in jobs %}
-            <tr>
+            
+            <tr class="click-row" data-href="{% url 'web:single-job' job.pk %}">
               <th scope="row">{{ job.pk }}</th>
               <td><a href="{% url 'web:single-job' job.pk %}">{{ job.prf_number }}</a></td>
-              <td>{{ job.customer_name }}</td>
+              
+                {% if job.is_past_due %}
+                <td class="bg-danger">{{ job.requested_date }}</td>
+                {% elif job.is_late %}
+                <td class="bg-warning">{{ job.requested_date }}</td>
+                {% else %}
+                  <td>{{ job.requested_date  }}</td>
+                {% endif %}
+                          
               <td>{{ job.requested_by.first_name }} {{ job.requested_by.last_name }}</td>
+              <td>{{ job.customer_name }}</td>
               <td>
               {% for type in job.request_type.all %}
               <span class="btn-sm btn btn-success">{{ type }}</span>
@@ -36,11 +49,11 @@
                 <td>{{ job.required_date }}</td>
                 <td>{{ job.pallet_type }}</td>
                 <td>{{ job.expiry_date_format }}</td>
-                <td>{{ job.status }}</td>
+                <td class='bg-primary text-white' >{{ job.status }}</td>
                 <td>{{ job.special_instructions }}</td>
-                <td>{{ job.shrink_wraps }}</td>
+                <td>{{ job.shrink_wrap }}</td>
             </tr>
-    
+          </a>
             {% endfor %}
           </tbody>
         </table>
@@ -75,4 +88,19 @@
           </span>
         </nav>
       </span>
+
+
+  <script>
+    let clickRow = document.getElementsByClassName("click-row")
+
+    var reDirect = function(){
+      var href = this.getAttribute("data-href");
+      console.log(href)
+      window.location = href
+    }
+    for (var i = 0; i < clickRow.length; i++) {
+      clickRow[i].addEventListener('click', reDirect, false)
+    }
+    
+  </script>
 {% endblock content %}

@@ -8,7 +8,7 @@
   <form target="." method="post" class="mb-4">
     {% csrf_token %}
     <!-- Django form -->
-    {{ prf.required_date | as_crispy_field }}
+    
     <div class="form-row">
       <div class="col-10 col-md-11 col-lg-11">
         {{ prf.customer_name | as_crispy_field }}
@@ -54,10 +54,9 @@
       {{ prf.address_label | as_crispy_field }}
       <!-- END OF VUE JS CUSTOMER ADDRESS SELECT BOX -->
     </div>
-    {{ prf.request_type | as_crispy_field }}
-    <p style="font-size:12px;float: right;">
-      Hold ctrl or cmd key to select multiple
-    </p>
+    {{ prf.required_date | as_crispy_field }}
+    {{ prf.request_type  }}
+
     <br />
     <!-- VUE JS PRODUCT FORM -->
     <div id="newProduct">

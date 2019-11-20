@@ -5,13 +5,24 @@ from django.contrib.auth.decorators import login_required, permission_required, 
 from .forms import ProductRequestForm, CustomerForm, AddressForm, ProductionListForm
 from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
+from datetime import timedelta, date
 from .models import ProductionJob, ProductionList, ModelChangeLogsModel
 from customer.models import Address
+
+
 def staff_required(login_url=None):
     return user_passes_test(lambda u: u.is_staff, login_url=login_url)
 
 # Create your views here.
 
+
+def add_business_days(from_date, number_of_days):
+    to_date = from_date
+    while number_of_days:
+       to_date += timedelta(1)
+       if to_date.weekday() < 5: # i.e. is not saturday or sunday
+           number_of_days -= 1
+    return to_date
 
 def home(request):
     number_of_jobs = ProductionJob.objects.all().count()
@@ -30,23 +41,22 @@ def product_request_form(request):
         '''
         Here we get the last Production Job and we find it's PRF number
         '''
+        response = request.POST.copy()
         if ProductionJob.objects.count() == 0:
             prf_number = 10001
         else:
             last_prf_job = ProductionJob.objects.last()
             prf_number = last_prf_job.prf_number + 1
-        prf = ProductRequestForm(request.POST)
-        product_list_form = ProductionListForm(request.POST)
-        print(prf.errors)
-        print(product_list_form.errors)
-        if prf.is_valid and product_list_form.is_valid():
+        response['prf_number'] = prf_number
+        response['requested_by'] = user.id
+        prf = ProductRequestForm(response)
+        product_list_form = ProductionListForm(response)
+
+        if prf.is_valid() and product_list_form.is_valid():
             # We save the forms first and we create an object of each form
             production_job = prf.save()
-            production_list = product_list_form.save(commit=False)
+            production_list = product_list_form.save()
             # We then update all the missing information and link the objects together
-            production_job.id = production_job.pk
-            production_job.requested_by = user
-            production_job.prf_number = prf_number
             production_job.customer_address_id = response['customer_address_id']
             production_job.production_list.add(production_list)
             production_job.status = "Pending"
@@ -57,9 +67,6 @@ def product_request_form(request):
             return HttpResponseRedirect('/jobs/all-jobs/')
 
         else:
-            print(prf.errors)
-            print(product_list_form.errors)
-            print('not valid')
             messages.error(request, prf.errors)
             messages.error(request, product_list_form.errors)
             args = {
@@ -112,12 +119,15 @@ def add_customer(request):
 @login_required(login_url='/user/login/')
 def all_jobs(request):
     NUM_USER_TO_SHOW = 30
+    DEADLINE = 1
     production_jobs =ProductionJob.objects.all()
     paginator = Paginator(production_jobs, NUM_USER_TO_SHOW)
+    delayed = add_business_days(date.today(), DEADLINE)
     page = request.GET.get('page')
     jobs = paginator.get_page(page)
     args = {
-        "jobs": jobs
+        "jobs": jobs,
+        'delayed': delayed
     } 
     return render(request, "jobs/all_jobs.html", args)
 
@@ -127,10 +137,11 @@ def user_jobs(request):
     user = request.user
     production_jobs =ProductionJob.objects.filter(requested_by=user)
     paginator = Paginator(production_jobs, NUM_USER_TO_SHOW)
+    
     page = request.GET.get('page')
     jobs = paginator.get_page(page)
     args = {
-        "jobs": jobs
+        "jobs": jobs,
     } 
     return render(request, "jobs/user_jobs.html", args)
 

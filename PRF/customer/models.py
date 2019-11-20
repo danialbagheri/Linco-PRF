@@ -1,5 +1,5 @@
 from django.db import models
-
+from .countries import COUNTRIES
 # Create your models here.
 
 
@@ -16,8 +16,9 @@ class Address(models.Model):
 
 class Customer(models.Model):
     customer_name = models.CharField(max_length=200)
+    country = models.CharField(max_length=120, default='United Kingdom')
     sage_customer_id = models.CharField(max_length=50)
     address = models.ManyToManyField("Address", verbose_name="Addresses")
 
     def __str__(self):
-        return self.customer_name
+        return "{} - {}".format(self.customer_name, self.country)
