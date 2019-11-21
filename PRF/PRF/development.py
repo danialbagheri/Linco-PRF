@@ -3,6 +3,8 @@ import os
 DEBUG = True
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ALLOWED_HOSTS = ['*']
+DEFAULT_FROM_EMAIL = 'The PRF <admin@lincocare.com>'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'w8m)o)$0yfrka6_l@h0#(rjwt)^2tmv3w!w+8+83w4)hcio314'
 DATABASES = {

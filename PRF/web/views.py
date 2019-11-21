@@ -120,7 +120,7 @@ def add_customer(request):
 def all_jobs(request):
     NUM_USER_TO_SHOW = 30
     DEADLINE = 1
-    production_jobs =ProductionJob.objects.all()
+    production_jobs =ProductionJob.objects.all().exclude(status="Saved")
     paginator = Paginator(production_jobs, NUM_USER_TO_SHOW)
     delayed = add_business_days(date.today(), DEADLINE)
     page = request.GET.get('page')

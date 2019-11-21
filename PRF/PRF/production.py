@@ -13,9 +13,9 @@ EMAIL_HOST = 'mail.privateemail.com'
 EMAIL_HOST_USER = ''
 EMAIL_HOST_PASSWORD = ''
 EMAIL_PORT = 587
-DEFAULT_FROM_EMAIL = 'The Team <admin@pharmacistcoop.co.uk>'
-CSRF_COOKIE_DOMAIN = '.linco.co.uk'
-
+DEFAULT_FROM_EMAIL = 'The PRF <admin@lincocare.com>'
+CSRF_COOKIE_DOMAIN = '.lincocare.co.uk'
+ADMINS = [('Danial', 'danial@lincocare.com'), ]
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',

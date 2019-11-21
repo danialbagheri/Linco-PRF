@@ -10,6 +10,7 @@ SHRINK_WRAP = (
     ('Security Tape', 'Security Tape'),
 )
 STATUS = (
+    ('Saved', 'Saved'),
     ('Pending', 'Pending'),
     ('Open', 'Open'),
     ('Reviewing', 'Reviewing'),
