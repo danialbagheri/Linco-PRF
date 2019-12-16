@@ -4,9 +4,48 @@
 <!-- load custom tags -->
 {% load business_days %}
 
+<div class="container-fluid p-2 bg-dark">
+  
+  <div class="row p-3">
+    <div class="col-12 col-md-12 col-lg-4 col-xl-4  mb-md-3 mb-3 mb-ls-0">
+        <form method="GET" actions="." class="form-inline" >
+            <input name="search" class="form-control" placeholder="PRF number, customer name or users.." style="width:70%;"/>
+            <button type="submit" class="btn btn-outline-light">Search</button>
+        </form>
+    </div>
+    <div class="col-12 col-md-12 col-lg-8 col-xl-8">
+        <form method="GET" actions="." class="form-inline" >
+          <label class="text-white mr-1">By Status:</label>
+            <select class="form-control mr-3">
+              <option>Pending</option>
+              <option>In-progress</option>
+              <option>Delayed</option>
+              <option>Completed</option>
+            </select>
+            <label class="text-white mr-1">By Pallet Type:</label>
+            <select class="form-control mr-3">
+              <option>Standard</option>
+              <option>Europe</option>
+            </select>
+            <label class="text-white mr-1">By Request Type:</label>
+            <select class="form-control mr-3">
+              <option>Bulk</option>
+              <option>Re-Work</option>
+              <option>Filling</option>
+              <option>Coding</option>
+              <option>Packing</option>
+              <option>P.Label</option>
+            </select>
+            <button type="submit" class="btn btn-outline-light">Filter</button>
+        </form>
+    </div>
+  </div>
+
+
+</div>
 <span class="table-responsive text-nowrap ">
         <table class="table table-hover table w-auto ">
-          <thead class="thead-dark">
+          <thead class="thead-dark" >
             <tr>
               <th scope="col">#</th>
               <th scope="col">PRF Number</th>

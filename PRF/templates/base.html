@@ -36,7 +36,7 @@
                             <a class="nav-link" href="{% url 'web:request-form' %}">+ New PRF</a>
                         </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'web:user-jobs' %}">My PRFs</a>
+                        <a class="nav-link" href="">My PRFs</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'web:all-jobs' %}">Jobs</a>
@@ -44,6 +44,11 @@
 
                 </ul>
                 <ul class="navbar-nav d-flex justify-content-end">
+                    <li class="nav-item">
+                        <a class="nav-link" href=""><i class="material-icons">
+                            notification_important
+                        </i></a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url "user:logout" %}">Logout</a>
                     </li>

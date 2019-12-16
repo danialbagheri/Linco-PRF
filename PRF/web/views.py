@@ -19,15 +19,16 @@ def staff_required(login_url=None):
 def add_business_days(from_date, number_of_days):
     to_date = from_date
     while number_of_days:
-       to_date += timedelta(1)
-       if to_date.weekday() < 5: # i.e. is not saturday or sunday
-           number_of_days -= 1
+        to_date += timedelta(1)
+        if to_date.weekday() < 5:  # i.e. is not saturday or sunday
+            number_of_days -= 1
     return to_date
+
 
 def home(request):
     number_of_jobs = ProductionJob.objects.all().count()
     args = {
-        "number_of_jobs":number_of_jobs
+        "number_of_jobs": number_of_jobs
     }
     return render(request, "home.html", args)
 
@@ -82,6 +83,7 @@ def product_request_form(request):
     }
     return render(request, "PRF/product_request_form.html", args)
 
+
 @login_required(login_url='/user/login/')
 def add_customer(request):
     customer_form = CustomerForm()
@@ -120,7 +122,8 @@ def add_customer(request):
 def all_jobs(request):
     NUM_USER_TO_SHOW = 30
     DEADLINE = 1
-    production_jobs =ProductionJob.objects.all().exclude(status="Saved")
+    production_jobs = ProductionJob.objects.all().exclude(
+        status="Saved").order_by("requested_date")
     paginator = Paginator(production_jobs, NUM_USER_TO_SHOW)
     delayed = add_business_days(date.today(), DEADLINE)
     page = request.GET.get('page')
@@ -128,27 +131,30 @@ def all_jobs(request):
     args = {
         "jobs": jobs,
         'delayed': delayed
-    } 
+    }
     return render(request, "jobs/all_jobs.html", args)
+
 
 @login_required(login_url='/user/login/')
 def user_jobs(request):
     NUM_USER_TO_SHOW = 30
     user = request.user
-    production_jobs =ProductionJob.objects.filter(requested_by=user)
+    production_jobs = ProductionJob.objects.filter(requested_by=user)
     paginator = Paginator(production_jobs, NUM_USER_TO_SHOW)
-    
+
     page = request.GET.get('page')
     jobs = paginator.get_page(page)
     args = {
         "jobs": jobs,
-    } 
+    }
     return render(request, "jobs/user_jobs.html", args)
+
 
 @login_required(login_url='/user/login/')
 def single_job(request, job_id):
-    production_job =ProductionJob.objects.get(id=job_id)
-    logs = ModelChangeLogsModel.objects.filter(table_name="ProductionJob", table_id=production_job.pk)
+    production_job = ProductionJob.objects.get(id=job_id)
+    logs = ModelChangeLogsModel.objects.filter(
+        table_name="ProductionJob", table_id=production_job.pk)
     users = User.objects.all()
     addresses = Address.objects.all()
     args = {
@@ -156,7 +162,5 @@ def single_job(request, job_id):
         "logs": logs,
         "users": users,
         "addresses": addresses
-    } 
+    }
     return render(request, "jobs/single_job.html", args)
-
-

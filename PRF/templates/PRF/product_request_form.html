@@ -1,11 +1,43 @@
-{% extends 'base.html' %} {% load crispy_forms_tags %} {% block content %}
+{% extends 'base.html' %} 
+{% load crispy_forms_tags %} 
+{% load staticfiles %}
+{% block content %}
 <div class="container mt-4">
-  <p>
+  <p class="text-centre bg-info text-white p-4">
     This form is being requested by
     <strong>{{ user.first_name }} {{ user.last_name }}</strong> on
-    <strong>{% now "jS F Y H:i" %}</strong>.
+    <strong>{% now "jS F Y H:i" %}</strong>.<br />
+    <span id="typeInfo"></span>
   </p>
-  <form target="." method="post" class="mb-4">
+  <div class="row" id="requestType">
+    <div class="col-12"><p>Please choose the type of your request:</p></div>
+    
+    <div class="col-12 col-md-4">
+      <div class="card card-hover" onClick="selectType(this,`Filling`)">
+        <div class="card-body">
+        <h5 class="card-title"> Filling</h3>
+          <p class="card-text" style="font-size: 13px;">New and Repeat private label orders, short batch run very, large batch run.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-md-4">
+      <div class="card card-hover" onClick="selectType(this,`Re-Work`)">
+        <div class="card-body">
+          <h5 class="card-title">Re-work </h3>
+            <p class="card-text" style="font-size: 13px;">Includes coding, repacking</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-md-4">
+      <div class="card card-hover" onClick="selectType(this,`Bulk`)">
+        <div class="card-body">
+          <h5 class="card-title">Bulk</h3>
+            <p class="card-text" style="font-size: 13px;">All type bulk orders.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <form target="." method="post" class="mt-4 mb-4" id="mainForm">
     {% csrf_token %}
     <!-- Django form -->
     
@@ -51,11 +83,11 @@
         </div>
       </div>
       <br />
-      {{ prf.address_label | as_crispy_field }}
+      <div class="ml-2">{{ prf.address_label | as_crispy_field }}</div>
       <!-- END OF VUE JS CUSTOMER ADDRESS SELECT BOX -->
     </div>
     {{ prf.required_date | as_crispy_field }}
-    {{ prf.request_type  }}
+    
 
     <br />
     <!-- VUE JS PRODUCT FORM -->
@@ -138,7 +170,7 @@
   <span class="mt-4 "></span>
   <br />
 </div>
-
+<script src={% static "scripts/prf.js" %}></script>
 <script>
   var customerId = document.getElementById("id_customer_name");
 

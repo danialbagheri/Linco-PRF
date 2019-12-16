@@ -12,10 +12,7 @@ SHRINK_WRAP = (
 STATUS = (
     ('Saved', 'Saved'),
     ('Pending', 'Pending'),
-    ('Open', 'Open'),
-    ('Reviewing', 'Reviewing'),
-    ('On-Hold', 'On-Hold'),
-    ('Awaiting Information', 'Awaiting Information'),
+    ('Rejected', 'Rejected'),
     ('In progress', 'In progress'),
     ('Complete', 'Complete'),
 )
